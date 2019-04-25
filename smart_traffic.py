@@ -6,33 +6,44 @@ import constants
 
 
 def mask_preproscessing(img):
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
+    kernel_5 = cv2.getStructuringElement(cv2.MORPH_RECT, (10, 10))
 
-    # Fill any small holes
-    closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
+    _, threshold = cv2.threshold(img, 80, 255, cv2.THRESH_BINARY)
 
-    # Remove noise
-    opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel)
+    opening = cv2.morphologyEx(threshold, cv2.MORPH_OPEN, kernel)
+    blur = cv2.GaussianBlur(opening, (5, 5), 0)
+    # cv2.imshow("after blur", blur)
+    closing = cv2.morphologyEx(blur, cv2.MORPH_CLOSE, kernel)
+    # cv2.imshow("after closing", closing)
+    threshold = cv2.dilate(closing, kernel_5)
+    threshold = cv2.dilate(threshold, kernel_5)
+    threshold = cv2.erode(threshold, kernel_5)
 
-    blur = cv2.blur(opening, (2, 2))
-
-    # Dilate to merge adjacent blobs
-    dilation = cv2.dilate(blur, kernel, iterations=40)
-
-    _, th = cv2.threshold(dilation, 240, 255, cv2.THRESH_BINARY)
-
-    return th
+    threshold = cv2.dilate(threshold, kernel_5)
+    threshold = cv2.dilate(threshold, kernel_5)
+    threshold = cv2.erode(threshold, kernel_5)
+    cv2.imshow("after dilation", threshold)
+    return threshold
 
 
 def start():
     videoCapture = cv2.VideoCapture(paths.VIDEO_PATH)
-    bgSubtractor = cv2.createBackgroundSubtractorMOG2(varThreshold=210, detectShadows=True)
+    bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, varThreshold=230, detectShadows=True)
+
+    frameWidth = int(videoCapture.get(3))
+    frameHeight = int(videoCapture.get(4))
+    linePoint1 = (0, int(frameHeight / 2))
+    linePoint2 = (frameWidth, int(frameHeight / 2))
 
     while True:
 
         _, frame = videoCapture.read()
 
+        cv2.line(frame, linePoint1, linePoint2, (0, 0, 255), 2)
+
         fgMask = bgSubtractor.apply(frame)
+
         fgMask = mask_preproscessing(fgMask)
 
         contours, _ = cv2.findContours(fgMask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
@@ -42,7 +53,7 @@ def start():
 
         cv2.imshow("fgMask", frame)
 
-        key = cv2.waitKey(33)
+        key = cv2.waitKey(50)
         if key == 27:
             break
 

@@ -1,66 +1,54 @@
-# # imports
-#
-# import os
-# import random
-#
-# import skvideo.io
-#
-# import logging
-# import logging.handlers
-#
 # import cv2
-#
 # import paths
-# import constants
-#
-# cv2.ocl.setUseOpenCL(False)
-# random.seed(123)
-#
-#
-# def background_subtractor_taining(bgSubtractor, videoCapture):
-#     """
-#       apply some frames to detect the most reliable background
-#     """
-#
-#     logging.info('start training the background subtrator')
-#
-#     i = 0
-#
-#     for eachFrame in videoCapture:
-#         bgSubtractor.apply(eachFrame, None, constants.LEARNING_RATE)
-#         i += 1
-#         if i >= constants.TRAINING_FRAMES_NO:
-#             return videoCapture
 #
 #
 # def start():
-#     # use Mixture of Gaussian algorithm built in openCV to create background subtractor
-#     bgSubtractor = cv2.createBackgroundSubtractorMOG2(constants.TRAINING_FRAMES_NO, varThreshold=25, detectShadows=True)
+#     videoCapture1 = cv2.VideoCapture(paths.VIDEO_PATH)
+#     videoCapture2 = cv2.VideoCapture(paths.VIDEO_PATH)
 #
-#     videoCapture = skvideo.io.vreader(paths.VIDEO_PATH)
+#     frameWidth = int(videoCapture1.get(3))
+#     frameHeight = int(videoCapture1.get(4))
+#     linePoint1 = (0, int(frameHeight / 2))
+#     linePoint2 = (frameWidth, int(frameHeight / 2))
 #
-#     # apply the background subtractor to the train function to extract the background from the loaded video
-#     videoCapture = background_subtractor_taining(bgSubtractor, videoCapture)
+#     while True:
 #
-#     frame_number = -1
+#         _, frame1 = videoCapture1.read()
+#         _, frame2 = videoCapture2.read()
+#         cv2.line(frame1, linePoint1, linePoint2, (0, 0, 255), 2)
 #
-#     for frame in videoCapture:
-#         if not frame.any():
-#             logging.error("Frame capture failed, stopping...")
+#         frame1_RGB = cv2.cvtColor(frame1, cv2.COLOR_RGB2GRAY)
+#         frame2_RGB = cv2.cvtColor(frame2, cv2.COLOR_RGB2GRAY)
+#
+#         frame1_RGB = cv2.GaussianBlur(frame1_RGB, (5, 5), 0)
+#         frame1_RGB = cv2.GaussianBlur(frame2_RGB, (5, 5), 0)
+#
+#         abs_diff = cv2.absdiff(frame1_RGB, frame2_RGB, None)
+#
+#         _, threshold = cv2.threshold(abs_diff, 30, 255, cv2.THRESH_BINARY)
+#
+#         kernel_3 = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+#         kernel_5 = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
+#         kernel_7 = cv2.getStructuringElement(cv2.MORPH_RECT, (7, 7))
+#         kernel_15 = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 15))
+#
+#         threshold = cv2.dilate(threshold, kernel_5)
+#         threshold = cv2.dilate(threshold, kernel_5)
+#         threshold = cv2.erode(threshold, kernel_5)
+#
+#         threshold = cv2.dilate(threshold, kernel_5)
+#         threshold = cv2.dilate(threshold, kernel_5)
+#         threshold = cv2.erode(threshold, kernel_5)
+#
+#         cv2.imshow("frame1", threshold)
+#
+#         key = cv2.waitKey(33)
+#         if key == 27:
 #             break
 #
-#         frame_number += 1
-#
-#         cv2.imwrite("/Volumes/SSD 1/Smart-Traffic-light-control1/output/" + str(frame_number) + ".png", frame)
-#
-#         fgmask = cv2.BackgroundSubtractor.apply(frame, fgmask , constants.LEARNING_RATE)
-#
-#         cv2.imwrite("/Volumes/SSD 1/Smart-Traffic-light-control1/output/for_" + str(frame_number) + ".png", frame)
+#     videoCapture1.release()
+#     cv2.destroyAllWindows()
 #
 #
 # if __name__ == "__main__":
-#
-#     if not os.path.exists(paths.IMAGE_PATH):
-#         os.makedirs(paths.IMAGE_PATH)
-#
 #     start()
