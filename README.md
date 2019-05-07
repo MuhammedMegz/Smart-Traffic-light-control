@@ -79,4 +79,4 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
    - Un-zip
    - Open the un-zipped file then open a new terminal inside this file directory.
    - Execute "run.sh" script using this line "./run.sh" in terminal to run the program, you may need to change permissions for this          script using this line "chmod u+x run.sh".
-   - This script will run 2 new terminals and 2 windows
+   - This script will run 2 new terminals and 3 windows, one for the traffic light simulation, one for the North-South road with the          detected contours and one for the East-West road with detected contours.
