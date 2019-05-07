@@ -91,3 +91,6 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
    
    The GUI program with the actions taken:
    ![alt text](screenshots/sc7.png)
+   
+## IPC(Inter process communtication):
+    The detection module and the GUI program can't run on the same thread as the GUI needs consistent update an refresh of the screen while the detection module takes time for processing so we ran each program on a different thread with a socket opened to enable communication between the two processes.  
