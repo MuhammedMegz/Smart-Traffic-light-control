@@ -31,6 +31,13 @@ $ NS_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadow
 
   Time division was the smartest and the main part here to write logic to manage all the scenarios
   
+  ```
+  $ if waited_time < min_waited_time :
+        waited_time = min_waited_time
+  $ elif waited_time > max_waited_time :
+        waited_time = max_waited_time
+  ```
+  
 ## GUI: 
 
   Using Python Tkinter library to build the GUI, first we made a animation to simulate which direction is granted to move, 
