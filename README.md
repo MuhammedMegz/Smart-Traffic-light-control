@@ -30,7 +30,6 @@ $ NS_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadow
   
    ![alt text](https://cdn-images-1.medium.com/max/800/0*iNYtQubKAtK0OGG5.png)
    
-   The background is obtained through training the model 
    
    
   Then we make some processing for image quality like openning, closing, dilation, erosion, and blur to draw our contours perfectly, after that thresholding the detected contours to extract the best ones and to be counted as the number of moving vehicles.
@@ -41,6 +40,8 @@ $ NS_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadow
  dilation = cv2.dilate(opening, kernel, iterations=2)
  _ , th = cv2.threshold(dilation, 240, 255, cv2.THRESH_BINARY)
 ```
+  # A photo from out model after the bgSubtraction and filtering:
+  ![alt text](screenshots/sc7.png)
   
 Finally, Drawing the boxes for detected cars to make sure that the output is correct after this long term processes.
   
