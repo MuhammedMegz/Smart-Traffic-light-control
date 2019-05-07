@@ -30,29 +30,29 @@ $ NS_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadow
   Then we make some processing for image quality like openning, closing, dilation, erosion, and blur to draw our contours perfectly, after that thresholding the detected contours to extract the best ones and to be counted as the number of moving vehicles.
   
 ```
-$ closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel, iterations=1)
-$ opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel, iterations=1)
-$ dilation = cv2.dilate(opening, kernel, iterations=2)
-$ _ , th = cv2.threshold(dilation, 240, 255, cv2.THRESH_BINARY)
+ closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel, iterations=1)
+ opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel, iterations=1)
+ dilation = cv2.dilate(opening, kernel, iterations=2)
+ _ , th = cv2.threshold(dilation, 240, 255, cv2.THRESH_BINARY)
 ```
   
 Finally, Drawing the boxes for detected cars to make sure that the output is correct after this long term processes.
   
 ```
-$ EW_contours, _ = cv2.findContours(EW_fgMask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-$ NS_contours, _ = cv2.findContours(NS_fgMask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+ EW_contours, _ = cv2.findContours(EW_fgMask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+ NS_contours, _ = cv2.findContours(NS_fgMask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 ```
 ```
-$ for (i, contour) in enumerate(EW_contours):
-$    (x, y, w, h) = cv2.boundingRect(contour)
-$     contour_valid = (w >= 40) and (
-$            h >= 40)
-$
-$           if not contour_valid:
-$                continue
-$           
-$           cv2.rectangle(EW_frame, (x, y), (x+w, y+h), (0,255,0),3)
-$           EWCount+=1
+ for (i, contour) in enumerate(EW_contours):
+    (x, y, w, h) = cv2.boundingRect(contour)
+     contour_valid = (w >= 40) and (
+            h >= 40)
+
+           if not contour_valid:
+                continue
+           
+           cv2.rectangle(EW_frame, (x, y), (x+w, y+h), (0,255,0),3)
+           EWCount+=1
 ```
  
  
@@ -61,9 +61,9 @@ $           EWCount+=1
   Time division was the smartest and the main part here to write logic to manage all the scenarios
   
   ```
-  $ if waited_time < min_waited_time :
+   if waited_time < min_waited_time :
         waited_time = min_waited_time
-  $ elif waited_time > max_waited_time :
+   elif waited_time > max_waited_time :
         waited_time = max_waited_time
   ```
   
