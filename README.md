@@ -41,7 +41,7 @@ $ NS_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadow
  _ , th = cv2.threshold(dilation, 240, 255, cv2.THRESH_BINARY)
 ```
   # A photo from out model after the bgSubtraction and filtering:
-  ![alt text](screenshots/sc7.png)
+  ![alt text](screenshots/sc9.png)
   
 Finally, Drawing the boxes for detected cars to make sure that the output is correct after this long term processes.
   
