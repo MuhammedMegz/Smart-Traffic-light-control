@@ -43,16 +43,16 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
  NS_contours, _ = cv2.findContours(NS_fgMask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 ```
 ```
- for (i, contour) in enumerate(EW_contours):
-    (x, y, w, h) = cv2.boundingRect(contour)
-     contour_valid = (w >= 40) and (
-            h >= 40)
-
-           if not contour_valid:
-                continue
-           
-           cv2.rectangle(EW_frame, (x, y), (x+w, y+h), (0,255,0),3)
-           EWCount+=1
+ def waited_time(q,x):
+    if q==0 and x==0:
+        return min_waited_time
+    ratio=q/(q+x)
+    waited_time=ratio*max_waited_time
+    if waited_time < min_waited_time :
+        waited_time = min_waited_time
+    elif waited_time > max_waited_time :
+        waited_time = max_waited_time
+    return int(waited_time-(waited_time%5))
 ```
  
  
