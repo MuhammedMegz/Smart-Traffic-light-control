@@ -1,7 +1,8 @@
 from tkinter import *
+from Car import Car
 
 class TrafficLight:
-  def __init__(self, canvas, lightsposition):
+  def __init__(self, canvas, lightsposition, carPosition, direction):
       self.canvas = canvas
 
       self.trafficLightImage = []
@@ -14,6 +15,10 @@ class TrafficLight:
       self.timer = 0
       self.timerLabel  = self.createTimerLabel()
       self.startTimer()
+
+      self.car = Car(self.canvas, carPosition, direction)
+
+      self.updated = False
       
 
   def createTimerLabel(self):
@@ -44,6 +49,7 @@ class TrafficLight:
 
   def setTimer(self, time):
     self.timer = time
+    self.updated = True
     if self.currentLight == "R":
       self.changeToRed()
     elif self.currentLight == "G":
@@ -58,13 +64,17 @@ class TrafficLight:
   def changeToRed(self):
     self.canvas.itemconfig(self.trafficLightImgID, image=self.trafficLightImage[0])
     self.currentLight = "R"
+    self.car.stop()
+    
 
   def changeToYellow(self):
     self.canvas.itemconfig(self.trafficLightImgID, image=self.trafficLightImage[1])
+    self.updated = False
 
   def changeToGreen(self):
     self.canvas.itemconfig(self.trafficLightImgID, image=self.trafficLightImage[2])
     self.currentLight = "G"
+    self.car.move()
 
   def getCurrentLight(self):
     return self.currentLight
