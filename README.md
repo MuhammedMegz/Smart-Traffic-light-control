@@ -84,6 +84,7 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
   
 ## How to use (Ubuntu/Linux):
    - Download all files in the repo, the files might exceed 50MB because of the video which the model work on.
+      ![alt text](screenshots/sc1.png)
    - Un-zip
    - Open the un-zipped file then open a new terminal inside this file directory.
    - Execute "run.sh" script using this line "./run.sh" in terminal to run the program, you may need to change permissions for this          script using this line "chmod u+x run.sh".
