@@ -1,4 +1,4 @@
-# Smart-Traffic-light-control [![Build](https://cdnjs.cloudflare.com/ajax/libs/reactstrap/1.0.0/reactstrap.min.js)](https://cdnjs.cloudflare.com/ajax/libs/reactstrap/1.0.0/reactstrap.min.js)
+# Smart-Traffic-light-control 
 
 ##  Introduction 
 
