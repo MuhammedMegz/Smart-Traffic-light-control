@@ -79,5 +79,15 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
    - Execute "run.sh" script using this line "./run.sh" in terminal to run the program, you may need to change permissions for this          script using this line "chmod u+x run.sh".
    ![alt text](screenshots/sc3.png)
    - This script will run 2 new terminals and 3 windows, one for the traffic light simulation, one for the North-South road with the          detected contours and one for the East-West road with detected contours.
+   
    ![alt text](screenshots/sc4.png)
+   
    ![alt text](screenshots/sc5.png)
+   
+   ![alt text](screenshots/sc6.png)
+   
+   The detection module:
+   ![alt text](screenshots/sc7.png)
+   
+   The GUI program with the actions taken:
+   ![alt text](screenshots/sc8.png)
