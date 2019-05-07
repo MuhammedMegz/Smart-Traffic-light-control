@@ -44,7 +44,7 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
 ```
 
 ![alt text](https://github.com/MuhammedMegz/Smart-Traffic-light-control/raw/master/screenshots/sc5.png)
- 
+![alt text](https://github.com/MuhammedMegz/Smart-Traffic-light-control/blob/master/screenshots/sc6.png?raw=true)
  
 ## Time Divison:
 
