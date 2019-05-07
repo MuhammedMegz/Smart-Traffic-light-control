@@ -19,12 +19,18 @@ We used openCV functions and features not adding any third party stuff.
   
   We used Background subtraction tools to detect the background and trained out application for the first 500 frame, to detect the best and the most reliable background.
   
+  This algorithm takes the background pixels and assigns a Gaussian Distribution to each one. The weight of this distribution is the amount of time the colors stay in the scene. Basically, the algorithm tries to identify the background by the information from the Gaussian mixture. The idea is that the longer the color stays the higher the probability that it is a part of the background. The gaussian distribution helps this method to adapt to variance in illumination
+  
 ```
 $ EW_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadows=False)
 $ NS_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadows=False)
 ```
+
+   createBackgroundSubtractorMOG2 creates a Background object of class BackgroundSubtractorMOG2. When applied to the first image provided to this object, it starts creating a background model. As frames are fed to this object it continues updating the background.
   
    ![alt text](https://cdn-images-1.medium.com/max/800/0*iNYtQubKAtK0OGG5.png)
+   
+   The background is obtained through training the model 
    
    
   Then we make some processing for image quality like openning, closing, dilation, erosion, and blur to draw our contours perfectly, after that thresholding the detected contours to extract the best ones and to be counted as the number of moving vehicles.
