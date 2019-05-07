@@ -11,6 +11,6 @@ We used openCV functions and features not adding any third party stuff.
 
 ## Table of contents:
 
-* [General info](#general-info)
-* [Technologies](#technologies)
-* [Setup](#setup)
+* [Car Detection](#Car Detection)
+* [Time Divison](#Time division)
+* [GUI](#GUI)
