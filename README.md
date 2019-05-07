@@ -87,7 +87,7 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
    ![alt text](screenshots/sc6.png)
    
    The detection module:
-   ![alt text](screenshots/sc7.png)
+   ![alt text](screenshots/sc8.png)
    
    The GUI program with the actions taken:
-   ![alt text](screenshots/sc8.png)
+   ![alt text](screenshots/sc7.png)
