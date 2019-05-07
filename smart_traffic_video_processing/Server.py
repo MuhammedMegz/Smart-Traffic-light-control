@@ -11,3 +11,7 @@ class SocketServer:
 
     def send(self, data):
         self.conn.send(data.encode())
+
+
+    def close(self):
+        self.sock.close()
