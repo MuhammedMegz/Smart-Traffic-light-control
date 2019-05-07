@@ -61,10 +61,18 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
   Time division was the smartest and the main part here to write logic to manage all the scenarios
   
   ```
-   if waited_time < min_waited_time :
-        waited_time = min_waited_time
-   elif waited_time > max_waited_time :
-        waited_time = max_waited_time
+    if turn=="EW":
+        # the turn is on EW
+        if right_traffic_num >= forward_traffic_num:
+            return "no change"
+        return waited_time(right_traffic_num,forward_traffic_num)
+
+      
+    if turn=="NS":
+        # the turn is on NS
+        if forward_traffic_num >= right_traffic_num:
+            return "no change"
+        return waited_time(forward_traffic_num,right_traffic_num)
   ```
   
 ## GUI: 
