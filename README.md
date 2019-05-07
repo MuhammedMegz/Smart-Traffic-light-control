@@ -22,6 +22,10 @@ We used openCV functions and features not adding any third party stuff.
   Then we make some processing for image quality like openning, closing, dilation, erosion, and blur to draw our contours perfectly, after that thresholding the detected contours to extract the best ones and to be counted as the number of moving vehicles,
   Finally, Drawing the boxes for detected cars to make sure that the output is correct after this long term processes.
   
+```
+$ EW_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadows=False)
+$ NS_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadows=False)
+```
   
 ## Time Divison:
 
