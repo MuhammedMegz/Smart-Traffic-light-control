@@ -42,7 +42,15 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
  EW_contours, _ = cv2.findContours(EW_fgMask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
  NS_contours, _ = cv2.findContours(NS_fgMask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 ```
-```
+
+![alt text](https://github.com/MuhammedMegz/Smart-Traffic-light-control/raw/master/screenshots/sc5.png)
+ 
+ 
+## Time Divison:
+
+  Time division was the smartest and the main part here to write logic to manage all the scenarios
+  
+  ```
  def waited_time(q,x):
     if q==0 and x==0:
         return min_waited_time
@@ -53,26 +61,6 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
     elif waited_time > max_waited_time :
         waited_time = max_waited_time
     return int(waited_time-(waited_time%5))
-```
- 
- 
-## Time Divison:
-
-  Time division was the smartest and the main part here to write logic to manage all the scenarios
-  
-  ```
-    if turn=="EW":
-        # the turn is on EW
-        if right_traffic_num >= forward_traffic_num:
-            return "no change"
-        return waited_time(right_traffic_num,forward_traffic_num)
-
-      
-    if turn=="NS":
-        # the turn is on NS
-        if forward_traffic_num >= right_traffic_num:
-            return "no change"
-        return waited_time(forward_traffic_num,right_traffic_num)
   ```
   
 ## GUI: 
