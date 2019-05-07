@@ -14,6 +14,7 @@ We used openCV functions and features not adding any third party stuff.
 * [Car Detection](#Car-Detection)
 * [Time Divison](#Time-division)
 * [GUI](#GUI)
+* [Setup](#Setup)
 
 ## Car Detection:
   
@@ -73,3 +74,12 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
   add to this the traffic lights it self animated also.
   
   Then communicating to the time division part and car detection part using socket.io library, it was best choice to not getting any code injection.
+  
+## Setup:
+
+  All you have to do is to run the [run.sh] file included in the repo file after downloading it.
+  
+  ```
+  $ cd <repo-dir>
+  $ ./run.sh
+  ```
