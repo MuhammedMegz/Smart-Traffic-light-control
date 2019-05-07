@@ -75,11 +75,9 @@ Finally, Drawing the boxes for detected cars to make sure that the output is cor
   
   Then communicating to the time division part and car detection part using socket.io library, it was best choice to not getting any code injection.
   
-## Setup:
-
-  All you have to do is to run the [run.sh] file included in the repo file after downloading it.
-  
-  ```
-  $ cd <repo-dir>
-  $ ./run.sh
-  ```
+## How to use (Ubuntu/Linux):
+   - Download all files in the repo, the files might exceed 50MB because of the video which the model work on.
+   - Un-zip
+   - Open the un-zipped file then open a new terminal inside this file directory.
+   - Execute "run.sh" script using this line "./run.sh" in terminal to run the program, you may need to change permissions for this          script using this line "chmod u+x run.sh".
+   - This script will run 2 new terminals and 2 windows
