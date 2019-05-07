@@ -4,42 +4,46 @@ import numpy as np
 import paths
 from Server import SocketServer
 import constants
+import time, threading
+
+serverData = SocketServer()
+serverDataStr = ""
+
+def send_periodicly():
+    if serverDataStr != "":
+    	serverData.send(serverDataStr)
+    	print("send: " + serverDataStr)
+    threading.Timer(10, send_periodicly).start()
 
 
 def mask_preproscessing(img):
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (5, 5))
-    kernel_5 = cv2.getStructuringElement(cv2.MORPH_RECT, (10, 10))
 
-    _, threshold = cv2.threshold(img, 210, 255, cv2.THRESH_BINARY)
 
-    closing = cv2.morphologyEx(threshold, cv2.MORPH_CLOSE, kernel)
-    closing = cv2.morphologyEx(closing, cv2.MORPH_CLOSE, kernel)
-    closing = cv2.morphologyEx(closing, cv2.MORPH_CLOSE, kernel)
-    closing = cv2.morphologyEx(closing, cv2.MORPH_CLOSE, kernel)
-    opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel)
-    blur = cv2.GaussianBlur(opening, (5, 5), 0)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2, 2))
 
-    # cv2.imshow("after blur", blur)
-    closing = cv2.morphologyEx(blur, cv2.MORPH_CLOSE, kernel)
+    # Fill any small holes
+    closing = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel, iterations=1)
+    # Remove noise
+    opening = cv2.morphologyEx(closing, cv2.MORPH_OPEN, kernel, iterations=1)
 
-    # cv2.imshow("after closing", closing)
-    threshold = cv2.dilate(closing, kernel_5)
-    threshold = cv2.dilate(threshold, kernel_5)
-    threshold = cv2.dilate(threshold, kernel_5)
-    threshold = cv2.dilate(threshold, kernel_5)
-    threshold = cv2.erode(threshold, kernel_5)
+    # Dilate to merge adjacent blobs
+    dilation = cv2.dilate(opening, kernel, iterations=2)
 
-    cv2.imshow("after dilation", threshold)
-    return threshold
+    # threshold
+    _ , th = cv2.threshold(dilation, 240, 255, cv2.THRESH_BINARY)
+    
+    final = th
+    #cv2.imshow("after dilation", final)
+    return final   
 
 
 def start():
-    serverData = SocketServer()
 
     EW_videoCapture = cv2.VideoCapture(paths.EW_VIDEO_PATH)
     NS_videoCapture = cv2.VideoCapture(paths.NS_VIDEO_PATH)
 
-    bgSubtractor = cv2.createBackgroundSubtractorMOG2(varThreshold=230, detectShadows=True)
+    EW_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadows=False)
+    NS_bgSubtractor = cv2.createBackgroundSubtractorMOG2(history=500, detectShadows=False)
 
     # frameWidth = int(videoCapture.get(3))
     # frameHeight = int(videoCapture.get(4))
@@ -49,12 +53,10 @@ def start():
     while True:
 
         _, EW_frame = EW_videoCapture.read()
-        _, NS_frame = EW_videoCapture.read()
+        _, NS_frame = NS_videoCapture.read()
 
-        # cv2.line(frame, linePoint1, linePoint2, (0, 0, 255), 2)
-
-        EW_fgMask = bgSubtractor.apply(EW_frame)
-        NS_fgMask = bgSubtractor.apply(NS_frame)
+        EW_fgMask = EW_bgSubtractor.apply(EW_frame)
+        NS_fgMask = NS_bgSubtractor.apply(NS_frame)
 
         EW_fgMask = mask_preproscessing(EW_fgMask)
         NS_fgMask = mask_preproscessing(NS_fgMask)
@@ -62,24 +64,56 @@ def start():
         EW_contours, _ = cv2.findContours(EW_fgMask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
         NS_contours, _ = cv2.findContours(NS_fgMask, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
-        serverDataStr = str(len(NS_contours)) + "+" + str(len(EW_contours))
-        print(serverDataStr)
-        serverData.send(serverDataStr)
+        EWCount = 0
+        NSCount = 0
 
-        cv2.drawContours(EW_frame, EW_contours, -1, (0, 255, 0), 2)
-        cv2.drawContours(NS_frame, NS_contours, -1, (0, 255, 0), 2)
+        # filtering by with, height
+        for (i, contour) in enumerate(EW_contours):
+
+            (x, y, w, h) = cv2.boundingRect(contour)
+            contour_valid = (w >= 40) and (
+            h >= 40)
+
+            if not contour_valid:
+                continue
+            
+            cv2.rectangle(EW_frame, (x, y), (x+w, y+h), (0,255,0),3)
+            EWCount+=1
+
+        # filtering by with, height
+        for (i, contour) in enumerate(NS_contours):
+
+            (x, y, w, h) = cv2.boundingRect(contour)
+            contour_valid = (w >= 40) and (
+            h >= 40)
+
+            if not contour_valid:
+                continue
+            
+            cv2.rectangle(NS_frame, (x, y), (x+w, y+h), (0,255,0),3)
+            NSCount+=1
+	    
+
+	
+        global serverDataStr
+        serverDataStr = str(NSCount) + "," + str(EWCount)
+        #print("NS: " + str(NSCount) + ", EW: " + str(EWCount))
+
 
         cv2.imshow("EW_Contours", EW_frame)
         cv2.imshow("NS_Contours", NS_frame)
 
-        key = cv2.waitKey(50)
+        key = cv2.waitKey(25)
         if key == 27:
             break
 
     EW_videoCapture.release()
     NS_videoCapture.release()
     cv2.destroyAllWindows()
+    serverData.close()
 
 
 if __name__ == "__main__":
+    send_periodicly()
     start()
+    
