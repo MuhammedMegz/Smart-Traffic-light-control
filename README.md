@@ -14,7 +14,7 @@ We used openCV functions and features not adding any third party stuff.
 * [Car Detection](#Car-Detection)
 * [Time Divison](#Time-division)
 * [GUI](#GUI)
-* [How to use (Ubuntu/Linux)](#How-to-use-(Ubuntu/Linux):
+* [How to use (Ubuntu/Linux)](#How-to-use-(Ubuntu/Linux))
 ## Car Detection:
   
   We used Background subtraction tools to detect the background and trained out application for the first 500 frame, to detect the best and the most reliable background.
